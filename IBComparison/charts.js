@@ -613,7 +613,7 @@ function progression_dendrogram() {
     .attr("viewBox", "0 0 2000 2000")
     .classed("svg-content-responsive", true)
     .append("g")
-      .attr("transform",'translate(600,600)');
+      .attr("transform",'translate(600,550)');
 
 
 
@@ -674,12 +674,12 @@ function chord_age() {
 }
 
 function chord_assessment() {
-  var transform = "rotate(0) translate(500,500)";
+  var transform = "rotate(0) translate(500,530)";
   generate_chord('chord-assessment',"chord-assessment.json",20,transform);
 }
 
 function chord_principles() {
-  var transform = "rotate(0) translate(500,500)";
+  var transform = "rotate(0) translate(500,540)";
   generate_chord('chord-principles',"chord-principles.json",20,transform);
 }
 
