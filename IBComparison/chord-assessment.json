@@ -1,0 +1,38 @@
+[
+{"name":"P/Primary Years Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Middle Years Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Diploma Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Career Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"B/--1","size":100,"imports":["B/--1"]},
+{"name":"B/--1","size":100,"imports":["B/--1"]},
+{"name":"A/Exhibition","size":100,"imports":["P/Primary Years Program"]},
+{"name":"A/ePortfolio","size":100,"imports":["P/Diploma Program","P/Career Program"]},
+{"name":"A/On-Screen Examinations","size":100,"imports":["P/Middle Years Program"]},
+{"name":"A/Written Examinations","size":100,"imports":["P/Diploma Program","P/Career Program"]},
+{"name":"A/Extended Essay","size":100,"imports":["P/Diploma Program"]},
+{"name":"A/Custom Assessment","size":100,"imports":["P/Career Program"]},
+{"name":"B/--2","size":100,"imports":["B/--2"]},
+{"name":"B/--2","size":100,"imports":["B/--2"]},
+{"name":"F/Portfolios","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"F/Projects","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"F/Essays","size":100,"imports":["P/Diploma Program"]},
+{"name":"F/Examinations","size":100,"imports":["P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"B/--3","size":100,"imports":["B/--3"]},
+{"name":"B/--3","size":100,"imports":["B/--3"]},
+{"name":"C/Official Certificate","size":100,"imports":["P/Middle Years Program","P/Diploma Program"]},
+{"name":"C/IB Assessed","size":100,"imports":["P/Middle Years Program","P/Diploma Program"]},
+{"name":"B/--4","size":100,"imports":["B/--4"]},
+{"name":"B/--4","size":100,"imports":["B/--4"]}
+]

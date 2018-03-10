@@ -1,0 +1,49 @@
+[
+{"name":"P/Primary Years Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "4/International Mindedness","4/Intercultural","4/International Contexts","4/Global Contexts",
+  "5/Constructivist","5/Conceptual","5/Interdisciplinary","5/Transdisciplinary","5/Inquiry - Action - Reflection"
+]},
+{"name":"P/Middle Years Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "4/International Mindedness","4/Intercultural","4/International Contexts","4/Global Contexts",
+  "5/Constructivist","5/Conceptual","5/Interdisciplinary","5/Transdisciplinary","5/Inquiry - Action - Reflection"
+]},
+{"name":"P/Diploma Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "4/International Mindedness","4/Intercultural","4/International Contexts","4/Global Contexts",
+  "5/Constructivist","5/Conceptual","5/Interdisciplinary","5/Transdisciplinary","5/Inquiry - Action - Reflection"
+]},
+{"name":"P/Career Program","size":1000,"imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "4/International Mindedness","4/Intercultural","4/International Contexts","4/Global Contexts",
+  "5/Constructivist","5/Conceptual","5/Interdisciplinary","5/Transdisciplinary","5/Inquiry - Action - Reflection"
+]},
+{"name":"B/--1","size":100,"imports":["B/--1"]},
+{"name":"B/--1","size":100,"imports":["B/--1"]},
+{"name":"4/International Mindedness","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"4/Intercultural","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"4/International Contexts","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"4/Global Contexts","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"B/--4","size":100,"imports":["B/--4"]},
+{"name":"B/--4","size":100,"imports":["B/--4"]},
+{"name":"5/Constructivist","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"5/Conceptual","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"5/Interdisciplinary","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"5/Transdisciplinary","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"5/Inquiry - Action - Reflection","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"B/--3","size":100,"imports":["B/--3"]},
+{"name":"B/--3","size":100,"imports":["B/--3"]},
+{"name":"10/Inquirers","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Knowledgeable","size":10,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Thinkers","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Communicators","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Principled","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Open-minded","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Caring","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Risk-takers","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Balanced","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"10/Reflective","size":100,"imports":["P/Primary Years Program","P/Middle Years Program","P/Diploma Program","P/Career Program"]},
+{"name":"B/--2","size":100,"imports":["B/--2"]},
+{"name":"B/--2","size":100,"imports":["B/--2"]}
+]

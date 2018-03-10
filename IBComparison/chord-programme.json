@@ -1,0 +1,38 @@
+[
+{"name":"P/Primary Years Program","imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Middle Years Program","imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Diploma Program","imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"P/Career Program","imports":[
+  "10/Inquirers","10/Knowledgeable","10/Thinkers","10/Communicators","10/Principled","10/Open-minded","10/Caring","10/Risk-takers","10/Balanced","10/Reflective",
+  "/International Mindedness"
+]},
+{"name":"C/Theory of Knowledge","imports":["P/Diploma Program"]},
+{"name":"C/Creativity, Activity, Service","imports":["P/Diploma Program"]},
+{"name":"C/Extended Essay","imports":["P/Diploma Program"]},
+{"name":"B/--1","imports":["B/--1"]},
+{"name":"B/--1","imports":["B/--1"]},
+{"name":"E/Action","imports":["P/Middle Years Program"]},
+{"name":"E/Service","imports":["P/Middle Years Program"]},
+{"name":"E/Community Project","imports":["P/Middle Years Program"]},
+{"name":"E/Personal Project","imports":["P/Middle Years Program"]},
+{"name":"B/--2","imports":["B/--2"]},
+{"name":"B/--2","imports":["B/--2"]},
+{"name":"D/Mathematics","imports":["P/Diploma Program"]},
+{"name":"D/Individuals and Societies","imports":["P/Diploma Program"]},
+{"name":"D/Studies in Language and Literature","imports":["P/Diploma Program"]},
+{"name":"D/Language Acquisition","imports":["P/Diploma Program"]},
+{"name":"D/Sciences","imports":["P/Diploma Program"]},
+{"name":"D/The Arts","imports":["P/Diploma Program","P/Middle Years Program"]},
+{"name":"D/Physical and Health Education", "imports":["P/Middle Years Program"]},
+{"name":"D/Design", "imports":["P/Middle Years Program"]},
+{"name":"B/--3","imports":["B/--3"]}
+]

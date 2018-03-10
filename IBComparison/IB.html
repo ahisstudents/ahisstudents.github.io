@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<head>
+  <title>IB Program Comparisons</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://unpkg.com/blaze/scss/dist/blaze.min.css">
+<style>
+
+.node rect {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+.node text { font: 12px sans-serif; }
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
+/* hide chords */
+ .chord-age .c8_8, .chord-age .p8, .chord-age .c3_3, .chord-age .p3 {
+   display: none;
+ }
+
+ .chord-principles .c26_26, .chord-principles .c15_15, .chord-principles .c9_9, .chord-principles .c4_4,
+ .chord-principles .p26, .chord-principles .p15, .chord-principles .p9, .chord-principles .p4 {
+   display: none;
+ }
+
+ .chord-assessment .c19_19, .chord-assessment .c4_4, .chord-assessment .c11_11, .chord-assessment .c16_16,
+ .chord-assessment .p19, .chord-assessment .p4, .chord-assessment .p11, .chord-assessment .p16 {
+   display: none;
+ }
+
+
+ .svg-container {
+     display: inline-block;
+     position: relative;
+     width: 100%;
+     padding-bottom: 100%; /* aspect ratio */
+     vertical-align: top;
+     overflow: hidden;
+ }
+ .svg-content-responsive {
+     display: inline-block;
+     position: absolute;
+     top: 10px;
+     left: 0;
+ }
+
+   </style>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script src="//d3js.org/d3-hierarchy.v1.min.js"></script>
+  <script src="./charts.js"></script>
+
+</head>
+<body>
+  <h1 class="c-heading u-super">IB Program Comparisons</h1>
+  <div class="o-grid o-grid--demo">
+    <div class="o-grid__cell o-grid__cell--width-fixed">
+      <h1 class="c-heading u-large">Progression</h1>
+      <button type="button" class="c-button" onClick="rings_curriculum('DP');" id="rings">Diploma Program</button>
+      <button type="button" class="c-button" onClick="rings_curriculum('CP');" id="rings">Career Program</button>
+    </div>
+    <div class="o-grid__cell o-grid__cell--width-fixed" >
+      <h1 class="c-heading u-large">Curriculum</h1>
+      <button type="button" class="c-button" onClick="progression_dendrogram();" id="treemap">Course Map</button>
+    </div>
+    <div class="o-grid__cell o-grid__cell--width-fixed">
+      <h1 class="c-heading u-large">Characteristics</h1>
+      <button type="button" class="c-button" onClick="chord_age();" id="chord_age">Ages</button>
+      <button type="button" class="c-button" onClick="chord_principles();" id="chord_principles">Principles</button>
+      <button type="button" class="c-button" onClick="chord_assessment();" id="chord_assessment">Assessment </button>
+    </div>
+  </div>
+  <div id="chart"></div>
+  <script>
+  progression_dendrogram();
+//    rings_curriculum('DP');
+  </script>
+</body>
+</html>
