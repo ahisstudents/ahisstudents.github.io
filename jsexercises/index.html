@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<link>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <title>Javascript Exercises</title>
+    <script src="/lib/codemirror/codemirror.js"></script>
+    <script src="/lib/codemirror/javascript.js"></script>
+    <script src="/lib/codemirror/show-hint.js"></script>
+    <script src="/lib/codemirror/javascript-hint.js"></script>
+    <link href='/lib/riot/blaze.min.css' rel='stylesheet' type='text/css'>
+    <link href='/lib/codemirror/codemirror.css' rel='stylesheet' type='text/css'>
+    <link href='https://codemirror.net/theme/neo.css' rel='stylesheet' type='text/css'>
+
+
+    <script src="/test/jsexercises.js"></script>
+
+<!--    <link rel="stylesheet" href="<%= CDNHOST %>m/Courses/assets/game.css" media="screen">-->
+<!--    <link rel="stylesheet" href="<%= CDNHOST %>lib/bootstrap/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="<%= CDNHOST %>lib/bootstrap/bootswatch/superhero.min.css" type="text/css" />-->
+    <style>
+        BODY {
+          background-size: auto;
+          background-repeat: repeat-x;
+          background-color: rgb(230,230,230);
+          background-position: center;
+        }
+        #content {
+          display: flex;
+          width: 100%;
+          flex-grow: 1;
+          overflow: auto;
+          height: 100%;
+        }
+        #content div.BlockTitle {
+
+        }
+        #content div.BlockTitle .webix_view {
+          background-color: #C0C0C0;
+          color: white;
+        }
+        #content div.BlockTitle .webix_template {
+          font-size: 22px;
+        }
+      }
+      #content .webix_menu-x A.webix_list_item {
+        background: rgba(255, 255, 255, 0.3);
+      }
+        .tabview .BlockTitle {
+
+        }
+        .FieldController {
+
+        }
+        .FieldController .BlockTitle {
+
+        }
+        #nav A {
+          text-decoration: none;
+          color: #3f2d26;
+        }
+        #nav .mainnav a {
+          font-size: 120%;
+        }
+        A.exercise_btn {
+          width: 100%;
+          padding: 10px;
+          margin: 2px;
+          display: inline-block;
+          text-align: center;
+          background: #eee;
+        }
+        A.exercise_btn:hover {
+          cursor: pointer;
+          background: #ccc;
+        }
+        .star {
+          font-size: 150%;
+        }
+
+        #instructions_block {
+
+        }
+
+        #code_block {
+
+        }
+
+        #html_block {
+          margin: 20px;
+          display: block;
+          height: 50%;
+          border: solid 1px #888;
+          background: white;
+        }
+
+        #console_block {
+          margin: 20px;
+          display: block;
+          height: 50%;
+          border: solid 1px #888;
+          background: white;
+          overflow-y: scroll;
+        }
+
+        BODY {
+          min-height: 100%;
+          height:100vh;
+        }
+
+        #main {
+          height: 90%;
+        }
+
+        #main .o-grid, #main .o-grid__cell {
+          height: 100%;
+        }
+    </style>
+</head>
+<body>
+  <div class="c-overlay c-overlay--dismissible"></div>
+  <div id="drawer" class="o-drawer u-highest o-drawer--top ">
+    <div class="c-card">
+      <header class="c-card__header">
+        <h2 class="c-heading">
+          Exercises
+        </h2>
+      </header>
+      <div class="c-card__body">
+        <div id="navmenu" class="o-grid">
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="c-nav c-nav--light c-nav--inline">
+    <li class="c-nav__item"  onClick="toggle_drawer();"><a class="jsexercisesbtn">Javascript Exercises</a></li>
+  </ul>
+  <div id="main" class="c-card__body">
+    <div class="o-grid">
+      <div class="o-grid__cell o-grid__cell--width-50">
+        <div id="instructions_block" class="o-grid-text">
+        <p>Select an exercise above to begin.</p>
+        </div>
+        <div id="code_block" class="o-grid-text">
+          <button onClick="run()">Run</button>
+          <div id="results"></div>
+          <textarea id="codetext"></textarea>
+        </div>
+      </div>
+      <div class="o-grid__cell o-grid__cell--width-50">
+        <div id="html_block" class="o-grid-text"></div>
+        <div id="console_block" class="o-grid-text"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var t = document.getElementById('codetext');
+    var editor = CodeMirror.fromTextArea(t, {
+      lineNumbers: true,
+      extraKeys: {"Ctrl-Space": "autocomplete"},
+      mode: {name: "javascript", globalVars: true}
+    });
+    setMenu();
+
+  </script>
+</body>
+</html>
