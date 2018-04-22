@@ -60,12 +60,16 @@ lo.comparisons.forEach(function(n) {
   lo_paths[n[0]] = n[1];
   lo_paths[n[1]] = n[0];
 });
-for (let n in lo.creation[0]) {
-  for (let n2 in lo.creation[0]) {
-    if (n != n2) {
-      lo_paths[n] = n2;
-    }
-  }
+let last = lo.creation[0][0];
+for (let i = 1; i < lo.creation[0].length; i++) {
+  let n = lo.creation[0][i];
+  lo_paths[last] = n;
+  lo_paths[n] = last;
+  last = n;
+}
+for (let i = 0; i < lo.creation[0].length; i++) {
+  let n = lo.creation[0][i];
+  lo_nodes[n] = n;
 }
 
 var lo_nodes2 = [];
@@ -237,14 +241,16 @@ var nextEvent = function() {
 }
 
 var restart = function() {
+  init();
   eventno = -1;
+  auto = false;
   time = 0;
-  svg = d3.select("#chart").remove();
+  ready = 1;
+  d3.select("#chart div.svg-container").remove();
   setInner('message','');
   setInner('title','');
   progress = [];
   renderProgress();
-  init();
   event_start();
 }
 
@@ -721,24 +727,27 @@ function event_learn(ev) {
 }
 
 function nodeCheck(n) {
-  let r = {has: 0, count: n.length, tot: 0, avg: 0}
+  let r = {has: 0, count: 0, tot: 0, avg: 0}
   for (let i in n) {
-    if (nodeLookup[i] != null && nodes[nodeLookup[i]] != null) {
-      let node = nodes[nodeLookup[i]];
+    if (nodeLookup[n[i]] != null && nodes[nodeLookup[n[i]]] != null) {
+      let node = nodes[nodeLookup[n[i]]];
       r.has++;
       r.tot += node.value;
       d3.select('#node' + node.id).classed('highlight',true);
       lastEventClean.push(function() {
         d3.select('#node' + node.id).classed('highlight',false);
       })
+    } else {
+      console.log('nodeCheck failed',i);
     }
+    r.count++;
   }
   r.avg = r.tot / r.count;
   return r;
 }
 
 function linkCheck(l) {
-  let r = {has: 0, count: l.length, tot: 0, avg: 0}
+  let r = {has: 0, count: 0, tot: 0, avg: 0}
   let last = null;
   for (let i in l) {
     if (last != null) {
@@ -759,6 +768,7 @@ function linkCheck(l) {
           d3.select('#link' + l2 + '_' + l1).classed('highlight-link',false);
         })
       }
+      r.count++;
     }
     last = i;
   }
@@ -917,17 +927,21 @@ function event_formative(ev) {
       let r2 = _.random(0,lo.patterns.length-1);
       let r3 = linkCheck(lo.patterns[r2]);
       //console.log(r3)
+      console.log('form pattern',r3);
       c += '<li>Pattern ' + JSON.stringify(lo.patterns[r2]) + ' - ' + r3.has + '/' + r3.count + ' steps mastered.</li>';
     } else if (r == 3) {  //compare
       let r2 = _.random(0,lo.comparisons.length-1);
       let r3 = pathCheck(lo.comparisons[r2][0],lo.comparisons[r2][1]);
-      c += '<li>Compare/Evalute ' + lo.comparisons[r2][0] + ' to ' + lo.comparisons[r2][1] + ' ';
-      if (r3.has > 0) {
+      c += '<li>Compare/Evaluate ' + lo.comparisons[r2][0] + ' to ' + lo.comparisons[r2][1] + ' ';
+      console.log('form compare',r3);
+      if (r3.has == 0) {
         c += 'Connection too long or missing facts.';
       } else {
-        if (r3.len > 3) {
-          c += 'Connection needs reinforcement. (len: ' + r3.len + ')';
+        if (r3.pathlen > 3) {
+          c += 'Connection is too long (len: ' + r3.pathlen + '), but a new connection has been made.';
+          update([],[{source: r3.link[0], target: r3.link[1], value: 0}]);
         } else {
+
           c += 'Strong connection.';
         }
       }
@@ -952,7 +966,7 @@ function event_summative(ev) {
     c += 'Fact-based Examination<br />';
     let total = 0;
     let present = 0;
-    //console.log('summ nodes',ev.data);
+    console.log('summ nodes',ev.data);
     let r = nodeCheck(ev.data);
     let p = parseInt(r.has / r.count * 10000)/100;
     c += '<i>Results: ' + r.has + '/' + r.count + ' facts or ' + p + '%. Average value: ' + r.avg + '.<br /><br />';
@@ -961,33 +975,44 @@ function event_summative(ev) {
     c += 'Research or Presentation<br />';
     let r = linkCheck(ev.data);
     c += '<i>Results: ' + r.has + '/' + r.count + ' steps in the pattern or process.<br /><br />';
+    console.log('summ link',r);
   } else if (ev.type == 'comparisons') {
     c += 'Open-Ended Project<br />';
     let r = pathCheck(ev.data[0],ev.data[1]);
-    if (r.has > 0) {
+    if (r.has == 0) {
       c += '<i>Results: Could not complete the complex connection.<br /><br />';
     } else {
-      if (r.len > 3) {
-        c += '<i>Results: Completed a weak complex connection (len: ' + r.len + ').<br /><br />';
+      if (r.pathlen > 3) {
+        c += '<i>Results: Completed a weak complex connection (len: ' + r.pathlen + ').<br /><br />';
       } else {
-        c += '<i>Results: Completed a strong connection (len: ' + r.len + ').<br /><br />';
+        c += '<i>Results: Completed a strong connection (len: ' + r.pathlen + ').<br /><br />';
       }
     }
-    //console.log('summ compare',r);
+    console.log('summ compare',r);
   } else if (ev.type == 'create') {
     c += 'Creative Project/Performance<br />';
     let last = ev.data[0];
     let count = 0;
+    let tot = 0;
+    console.log('summ create data',ev.data);
+    let weak = 0;
+    let strong = 0;
     for (let i = 1; i < ev.data.length; i++) {
       let curr = ev.data[i];
       let r = pathCheck(curr,last);
       if (r.has > 0) {
+        if (r.pathlen <= 3) {
+          strong++;
+        } else {
+          weak++;
+        }
         count++;
       }
-      //console.log('summ create',r);
+      console.log('summ create',curr,r);
       last = ev.data[i];
+      tot++;
     }
-    c += '<i>Results: ' + count + '/' + ev.data.length + ' complex connections.<br /><br />';
+    c += '<i>Results: ' + strong + ' strong, ' + weak  + ' weak, and ' + (tot-weak-strong) + ' failed complex connections.<br /><br />';
   }
   c += '</div>';
   setInner('message',c);
