@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+  <title>IB Program Comparisons</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://unpkg.com/blaze/scss/dist/blaze.min.css">
+<style>
+body {
+  background #eee;
+}
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  fill: none;
+  stroke: #bbb;
+  width: 10px;
+}
+
+
+ .svg-container {
+     display: inline-block;
+     position: relative;
+     width: 100%;
+     padding-bottom: 100%; /* aspect ratio */
+     vertical-align: top;
+     overflow: hidden;
+ }
+ .svg-content-responsive {
+     display: inline-block;
+     position: absolute;
+     top: 10px;
+     left: 0;
+ }
+
+ .lo {
+   display: inline-block;
+   width: 28px;
+   height: 28px;
+   border-radius: 14px;
+   border: solid 1px #333;
+   background-color: #eee;
+   text-align: center;
+   padding: 3px;
+   vertical-align: middle;
+ }
+
+ .highlight {
+   fill: #ffff00;
+   stroke: #888;
+   stroke-width: 1;
+
+ }
+
+ #progressbar .learn-fail {
+   background-color: #FF0000;
+ }
+ #progressbar .learn-success {
+   background-color: #00FF00;
+ }
+ #progressbar .learn-warn {
+   background-color: #FFFF00;
+ }
+
+
+  </style>
+  <script src="//d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
+  <script src="./charts.js"></script>
+
+</head>
+<body>
+  <div class="c-card">
+    <header class="c-card__header">IB Formative vs Summative</header>
+    <div class="c-card__body">
+      <button type="button" class="c-button" onClick="nextEvent();" id="rings">Next</button>
+      <button id="toggle" type="button" class="c-button" onClick="toggle();" id="rings">Start</button>
+      <button type="button" class="c-button" onClick="restart();" id="rings">Restart</button>
+    </div>
+    <div class="c-card__body">
+      <div id="title"></div>
+      <div id="progressno">0%</div>
+      <div id="progressbar"></div>
+      <div id="message"></div>
+    </div>
+  </div>
+  <div class="o-grid">
+    <div class="o-grid__cell" style="width: 600px; height: 600px">
+      <div id="chart" style="width: 600px; height: 600px"></div>
+    </div>
+    <div class="o-grid__cell">
+      <div class="o-panel-container .o-grid--fit" style="height: 500px">
+        <div id="messages" class="o-panel"></div>
+      </div>
+    </div>
+  </div>
+  <div id="overlay" class="c-overlay c-overlay--visible"></div>
+  <div class="o-modal" id="modal">
+  <div class="c-card">
+    <header class="c-card__header">
+      <h2 class="c-heading">Formative and Summative Assessment Visualization</h2>
+    </header>
+    <div class="c-card__body">
+      This visualization attempts to portray formative assessment as a guide to shaping learning experiences and summative assessment as the ultimate outcome of the learning process.
+      <div id="lo"></div>
+    </div>
+    <footer class="c-card__footer">
+      <button type="button" class="c-button c-button--brand" onClick="event_start();">Start</button>
+    </footer>
+  </div>
+</div>
+  <script>
+    setLO();
+    init();
+
+  </script>
+</body>
+</html>
