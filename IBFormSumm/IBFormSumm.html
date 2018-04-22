@@ -2,6 +2,7 @@
 <head>
   <title>IB Program Comparisons</title>
 <meta charset="utf-8">
+ <meta name="author" content="James Lewis">
 <link rel="stylesheet" href="https://unpkg.com/blaze/scss/dist/blaze.min.css">
 <style>
 body {
@@ -44,13 +45,23 @@ body {
    text-align: center;
    padding: 3px;
    vertical-align: middle;
+   margin: 3px;
  }
 
  .highlight {
    fill: #ffff00;
    stroke: #888;
    stroke-width: 1;
+ }
 
+ .highlight2 {
+   fill: #FFA500;
+   stroke: #888;
+   stroke-width: 1;
+ }
+
+ .highlight-link {
+   stroke: #FFA500;
  }
 
  #progressbar .learn-fail {
@@ -63,6 +74,18 @@ body {
    background-color: #FFFF00;
  }
 
+ .plan {
+   background: rgb(240,240,240);
+ }
+
+
+.form {
+  background: rgb(240,240,255);
+}
+
+.summ {
+  background: rgb(255,240,240);
+}
 
   </style>
   <script src="//d3js.org/d3.v4.min.js"></script>
@@ -74,9 +97,21 @@ body {
   <div class="c-card">
     <header class="c-card__header">IB Formative vs Summative</header>
     <div class="c-card__body">
-      <button type="button" class="c-button" onClick="nextEvent();" id="rings">Next</button>
-      <button id="toggle" type="button" class="c-button" onClick="toggle();" id="rings">Start</button>
-      <button type="button" class="c-button" onClick="restart();" id="rings">Restart</button>
+      <div class="o-grid">
+        <div class="o-grid__cell">
+          <button type="button" class="c-button" onClick="nextEvent();" id="rings">Next</button>
+          <button id="toggle" type="button" class="c-button" onClick="toggle();" id="rings">Start</button>
+          <button type="button" class="c-button" onClick="restart();" id="rings">Restart</button>
+        </div>
+        <div class="o-grid__cell">
+          <div class="c-input-group c-input-group--rounded">
+            <button type="button" class="c-button" onClick="setSpeed(5);" id="speed5">Slow</button>
+            <button type="button" class="c-button c-button--active" onClick="setSpeed(3);" id="speed3">Normal</button>
+            <button type="button" class="c-button" onClick="setSpeed(1);" id="speed1">Fast</button>
+            <button type="button" class="c-button" onClick="setSpeed(0);" id="speed0">Fastest</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="c-card__body">
       <div id="title"></div>
@@ -101,9 +136,120 @@ body {
     <header class="c-card__header">
       <h2 class="c-heading">Formative and Summative Assessment Visualization</h2>
     </header>
-    <div class="c-card__body">
-      This visualization attempts to portray formative assessment as a guide to shaping learning experiences and summative assessment as the ultimate outcome of the learning process.
+    <div class="c-card__body o-panel" style="height: 500px;">
+      This visualization attempts to portray formative assessment as a guide to shaping learning experiences and summative assessment as the ultimate outcome of the learning process.<br />
+      <table class="c-table c-table--striped">
+        <thead class="c-table__head">
+          <tr class="c-table__row c-table__row--heading">
+            <th class="c-table__cell">Formative</th>
+            <th class="c-table__cell">Summative</th>
+          </tr>
+        </thead>
+        <tbody class="c-table__body">
+          <tr class="c-table__row">
+            <td class="c-table__cell">Self, peer, and student assessment</td>
+            <td class="c-table__cell">Teacher assessment</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Regular and frequent</td>
+            <td class="c-table__cell">Usually at the end of a unit</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Differentiated</td>
+            <td class="c-table__cell">Differentiated</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell"></td>
+            <td class="c-table__cell">Directly linked to statement of inquiry</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Inquiry-based</td>
+            <td class="c-table__cell">Inquiry-based</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Criterion-related</td>
+            <td class="c-table__cell">Criterion-related (not norm-referenced or criterion-referenced in IB)</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Often informal</td>
+            <td class="c-table__cell">Formal</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Guides learning goals and planning</td>
+            <td class="c-table__cell">Provides evidence of learning</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Internal</td>
+            <td class="c-table__cell">Can be externally moderated</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell"></td>
+            <td class="c-table__cell">Requires academic honesty</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Internal</td>
+            <td class="c-table__cell">Internal and sometimes external</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Leading to authentic, real-world, local, and global learning</td>
+            <td class="c-table__cell">Authentic, real-world, local, and global understanding and application</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">A wide range of informal and more formal interactions and evidence</td>
+            <td class="c-table__cell">Should consist of a portfolio of evidence, not a single final project</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Rubrics can be used</td>
+            <td class="c-table__cell">Rubrics (tied to either task-specific or subject-specific criteria)</td>
+          </tr>
+          <tr class="c-table__row">
+            <td class="c-table__cell">Examples:<ul>
+              <li>Peer/Self Assessments</li>
+              <li>Questioning</li>
+              <li>Group/Class Discussions</li>
+              <li>Exit Tickets</li>
+              <li>Diagnostic Tests</l1>
+              <li>Journals/Logs</li>
+              <li>Graphic Organizers/Represenations</li>
+              <li>Checklists</li>
+              <li>Reflections</li>
+              <li>Observations (non-participant or participant)</li>
+              <li>Practice Presentations</li>
+              <li>Quizzes</li>
+              <li>Individual Learning Goals</li>
+              <li>Descriptive Feedback</li>
+              <li>Worksheets</li>
+              </ul>
+            </td>
+            <td class="c-table__cell">Examples:<ul>
+              <li>Compositions</li>
+              <li>Creations of solutions or products</li>
+              <li>Essays</li>
+              <li>Examinations</li>
+              <li>Questionnaires</li>
+              <li>Investigations</li>
+              <li>Research</li>
+              <li>Performances</li>
+              <li>Presentations</li>
+              <li>Performance Tasks</li>
+            </ul></td>
+          </tr>
+
+        </tbody>
+      </table><br />
+      <p>I've been trying to come up with useful tools for demonstrating the importance of higher-order thinking.  For this visualization I've made the following assumptions:</p>
+      <ul>
+      <li>Facts are nodes (circles) representing abstract bits of knowledge.</li>
+      <li>Connections between nodes represent higher order thinking (particularly when distant connections are made repeatedly and then made more efficient).</p>
+      <li>Patterns of nodes (facts) are used to describe skills and processes.</li>
+      <li>The student's prior learning is randomized.</li>
+      <li>The learning plan is sequential, but randomized.  I think this makes the data more interesting, but I also think it reflects the difficulty of both knowing and meeting the needs of every student in a classroom.</li>
+      <li>Formative assessment opportunities will generally create new connections or facts when gaps are identified.</li>
+      </ul>
       <div id="lo"></div>
+      <div class="c-alert c-alert--warning">
+        I hacked this together fairly quickly and it definitely has bugs.  It should work well in Chrome, FireFox, and Safari, but might have issues in Internet Explorer or Edge. ~ James Lewis
+      </div>
     </div>
     <footer class="c-card__footer">
       <button type="button" class="c-button c-button--brand" onClick="event_start();">Start</button>

@@ -1,6 +1,6 @@
 //adapted from: https://bl.ocks.org/mbostock/4600693
 
-var svg, nodes, nodesValid, nodeById, nodeLength, nodeLookup, links, bilinks, simulation, color, ticked, forceLink, timer;
+var svg, nodes, nodesValid, nodeById, nodeLength, nodeLookup, linkLookup, links, bilinks, simulation, color, ticked, forceLink, timer;
 
 var width = 600;
 var height = 600;
@@ -11,6 +11,8 @@ var ready = 0;
 
 var time = 0;
 var eventno = -1;
+
+var speed = 3;
 
 var lastEventClean = [];
 
@@ -91,14 +93,11 @@ let lo_node = 0;
 let lo_link = 0;
 let lo_path = 0;
 let skip = [];
-for (let i = 0; i <= 101; i+= 12) {
-  skip[i] = true;
-}
-for (let i = 0; i <= 101; i+= 20) {
+for (let i = 5; i <= 90; i+= 10) {
   skip[i] = true;
 }
 
-for (let i = 1; i <= 100; i++) {
+for (let i = 1; i < 95; i++) {
   if (skip[i] != null) {
     continue;
   }
@@ -106,7 +105,7 @@ for (let i = 1; i <= 100; i++) {
   let ev = {event: 'learn'};
   if (r < 0.5) {
     ev.type = 'node';
-//    console.log(lo_nodes,lo_nodes2,lo_node);
+//    //console.log(lo_nodes,lo_nodes2,lo_node);
     ev.node = lo_nodes2[lo_node];
     ev.value = 0;
     if (node_levels[ev.node] != null) {
@@ -121,7 +120,7 @@ for (let i = 1; i <= 100; i++) {
     }
   } else if (r < 0.75) {
     ev.type = 'link';
-//    console.log('link',lo_link,lo_links2[lo_link])
+//    //console.log('link',lo_link,lo_links2[lo_link])
     ev.link = lo_links2[lo_link];
     lo_link++;
     if (lo_link >= lo_links2.length) {
@@ -139,30 +138,30 @@ for (let i = 1; i <= 100; i++) {
 }
 
 let formative = [];
-for (let i = 12; i <= 99; i+= 12) {
+for (let i = 5; i <= 90; i+= 10) {
   events[i] = {event: 'formative'};
 }
 
-events[20] = {event: 'summative', type: 'nodes', data: lo.facts};
-events[40] = {event: 'summative', type: 'links', data: lo.patterns[1]};
-events[60] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
-events[80] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
+events[95] = {event: 'summative', type: 'nodes', data: lo.facts};
+events[96] = {event: 'summative', type: 'links', data: lo.patterns[1]};
+events[97] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
+events[98] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
 events[99] = {event: 'summative', type: 'create', data: lo.creation[0]};
 
 events[100] = {event: 'final'};
 
-console.log(events);
+//console.log(events);
 
 function setLO() {
   let e = document.getElementById('lo');
   e.innerHTML = '';
-  let facts = '<div class="lorow">' + lo.facts.length + ' distinct facts. ';
+  let facts = '<div class="lorow">' + lo.facts.length + ' distinct facts. <br />';
   for (let i in lo.facts) {
     facts += '<div class="lo">' + lo.facts[i] + '</div> ';
   }
   facts += '</div>';
 
-  let patterns = '<div class="lorow">' + lo.patterns.length + ' processes and patterns. ';
+  let patterns = '<div class="lorow">' + lo.patterns.length + ' processes and patterns. <br />';
   for (let i in lo.patterns) {
     patterns += '<div class="loset">';
     for (let j in lo.patterns[i]) {
@@ -172,7 +171,7 @@ function setLO() {
   }
   patterns += '</div>';
 
-  let comparisons = '<div class="lorow">' + lo.comparisons.length + ' comparisons. ';
+  let comparisons = '<div class="lorow">' + lo.comparisons.length + ' comparisons. <br />';
   for (let i in lo.comparisons) {
     comparisons += '<div class="loset">';
     comparisons += '<div class="lo">' + lo.comparisons[i][0] + '</div> - ';
@@ -180,7 +179,17 @@ function setLO() {
     comparisons += '</div>';
   }
   comparisons += '</div>';
-  e.innerHTML = facts + '<br />' + patterns + '<br />' + comparisons;
+
+  let creation = '<div class="lorow">' + lo.creation.length + ' creative project. <br />';
+  for (let i in lo.creation) {
+    creation += '<div class="loset">';
+    for (let j in lo.creation[i]) {
+      creation += '<div class="lo">' + lo.creation[i][j] + '</div>  ';
+    }
+    creation += '</div>';
+  }
+  creation += '</div>';
+  e.innerHTML = facts + '<br />' + patterns + '<br />' + comparisons + '<br />' + creation + '<br />';
 }
 
 var eventTimer = function() {
@@ -195,9 +204,9 @@ var eventTimer = function() {
     }
     nextEvent();
   }
-//  console.log(time);
+//  //console.log(time);
   if (time > 100000) {
-    console.log('Time too long.',time);
+    //console.log('Time too long.',time);
     clearInterval(timer);
   }
 }
@@ -206,31 +215,37 @@ var nextEvent = function() {
   eventno++;
   if (events[eventno] == null) {
     time = 0;
-    console.log('Events end. ' + eventno,time);
+    //console.log('Events end. ' + eventno,time);
     clearInterval(timer);
-  }
-  let ev = events[eventno];
-  console.log('nextEvent',eventno,ev);
-  ev.eventno = eventno;
-  ev.time = time;
-  if (ev.event == 'preassess') {
-    event_preassess(ev);
-  } else if (ev.event == 'learn') {
-    event_learn(ev);
-  } else if (ev.event == 'formative') {
-    event_formative(ev);
-  } else if (ev.event == 'summative') {
-    event_summative(ev);
-  } else if (ev.event == 'final') {
-    event_final(ev);
+  } else {
+    let ev = events[eventno];
+    //console.log('nextEvent',eventno,ev);
+    ev.eventno = eventno;
+    ev.time = time;
+    if (ev.event == 'preassess') {
+      event_preassess(ev);
+    } else if (ev.event == 'learn') {
+      event_learn(ev);
+    } else if (ev.event == 'formative') {
+      event_formative(ev);
+    } else if (ev.event == 'summative') {
+      event_summative(ev);
+    } else if (ev.event == 'final') {
+      event_final(ev);
+    }
   }
 }
 
 var restart = function() {
-  eventno = 0;
+  eventno = -1;
   time = 0;
   svg = d3.select("#chart").remove();
-  lo_status = {};
+  setInner('message','');
+  setInner('title','');
+  progress = [];
+  renderProgress();
+  init();
+  event_start();
 }
 
 /* fact, pattern, evaluate, create */
@@ -261,6 +276,7 @@ function init() {
     bilinks = [];
     links = [];
     nodeLookup = {};
+    linkLookup = {};
 }
 
 
@@ -268,7 +284,7 @@ function update(newNodes,newLinks) {
   let linkr = svg.selectAll('.link').remove();
   let noder = svg.selectAll(".node").remove();
 
-//  console.log('update 1',newNodes,newLinks,nodes,links);
+//  //console.log('update 1',newNodes,newLinks,nodes,links);
   newNodes.forEach(function(newNode) {
     let i = nodes.length;
     nodes[i] = newNode;
@@ -278,7 +294,7 @@ function update(newNodes,newLinks) {
   });
 
   newLinks.forEach(function(l) {
-    console.log('link',l);
+    //console.log('link',l);
     if (nodeLookup[l.source] == null) {
       console.error('Invalid source',l);
       return;
@@ -290,25 +306,36 @@ function update(newNodes,newLinks) {
     var s = nodes[nodeLookup[l.source]],
         t = nodes[nodeLookup[l.target]],
         i = {type: 'i'}; // intermediate node
-//    console.log('links for each',l.source,'s',s,'i',i,l.target,'t',t);
+//    //console.log('links for each',l.source,'s',s,'i',i,l.target,'t',t);
     nodes.push(i);
     l.value = parseInt(l.value);
     if (l.value == 0) {
       l.value = 1;
     }
-    links.push({source: s, target: i, id: 'link'+ s.id + '_' + t.id, value: l.value});
-    links.push({source: i, target: t, id: 'link'+ t.id + '_' + s.id, value: l.value});
+    if (linkLookup[s.id] == null) {
+      linkLookup[s.id] = {};
+    }
+    linkLookup[s.id][t.id] = links.length;
+    links[links.length] = {source: s, target: i, id: 'link'+ s.id + '_' + t.id, value: l.value, source_id: s.id, target_id: t.id};
+    if (linkLookup[t.id] == null) {
+      linkLookup[t.id] = {};
+    }
+    linkLookup[t.id][t.id] = links.length;
+    links[links.length] = {source: i, target: t, id: 'link'+ t.id + '_' + s.id, value: l.value, source_id: t.id, target_id: s.id};
     bilinks.push([s, i, t, l.value]);
-//    console.log('bilinks.push',{s, i, t});
+//    //console.log('bilinks.push',{s, i, t});
   });
 
-//  console.log('update 2',nodes,links);
+//  //console.log('update 2',nodes,links);
 
   var link = svg.selectAll(".link")
     .data(bilinks)
     .enter().append("path")
       .attr("id",function(d) { return 'link'+ d[0].id + '_' + d[2].id; })
-      .attr("stroke-width",function(d) { return parseInt(d[3]); })
+      .attr("stroke-width",function(d) {
+        let w = parseInt(d[3]);
+        return (w == 0?1:w);
+      })
       .attr("class", "link");
 
 //  let startx = (_.random(0,1) == 0?0:width);
@@ -318,7 +345,7 @@ function update(newNodes,newLinks) {
     .enter().append("circle")
       .attr("class", "node")
       .attr("id",function(d) { return 'node'+ d.id; })
-      .attr("r", 5)
+      .attr("r", function(d) { return (parseInt(d.value)*3)+5; })
 //      .attr("transform","translate(" + startx + "," + starty + ")")
       .attr("fill", function(d) { return color(d.group); })
       .call(d3.drag()
@@ -337,7 +364,10 @@ function update(newNodes,newLinks) {
       .on("tick", function () {
 
         link.attr("d", positionLink);
-        link.attr("stroke-width",function (d) { return parseInt(d[3]);} );
+        link.attr("stroke-width",function (d) {
+          let w = parseInt(d[3]);
+          return (w == 0?1:w);
+        } );
         node.attr("transform", positionNode);
         node.attr("r",function (d) {return (parseInt(d.value)*3)+5; } );
       });
@@ -354,7 +384,7 @@ function positionLink(d) {
     console.error('positionLink',d);
     return null;
   }
-//  console.log('d',d);
+//  //console.log('d',d);
   return "M" + d[0].x + "," + d[0].y
        + "S" + d[1].x + "," + d[1].y
        + " " + d[2].x + "," + d[2].y;
@@ -389,7 +419,7 @@ function addOne(id) {
 
   let newNodes = [{id: id, value: 0}];
   let newLinks = [{source: r, target: id, value: 0}];
-  console.log('addOne',r,newNodes,newLinks);
+  //console.log('addOne',r,newNodes,newLinks);
   update(newNodes,newLinks);
 
 }
@@ -399,18 +429,18 @@ function addRandom() {
   //select random base
   let rv = _.random(0,nodesValid.length-1);
   let r = nodesValid[rv];
-//  console.log('add',r,rv,nodesValid,nodesValid[rv]);
+//  //console.log('add',r,rv,nodesValid,nodesValid[rv]);
   let newNodes = [];
   let newLinks = [];
 //  newLinks.push({source: r, target: nodes.length});
   let newNo = _.random(1,3);
-  console.log('adding ' + newNo + ' nodes to ' + r + '/' + rv);
+  //console.log('adding ' + newNo + ' nodes to ' + r + '/' + rv);
   for (let i = nodesValid.length; i < (newNo+nodesValid.length); i++) {
     let id = nodesValid.length;
     let vn = _.random(0,3);
     newNodes[id] = {id: id, value: vn};
     let connNo = _.random(1,3);
-    console.log("\t" + 'adding ' + connNo + ' links to ' + (nodesValid.length+i));
+    //console.log("\t" + 'adding ' + connNo + ' links to ' + (nodesValid.length+i));
     let v = _.random(1,3);
     if (i > nodesValid.length) {
       newLinks.push({source: id, target: id-1, value: v});
@@ -419,7 +449,7 @@ function addRandom() {
     }
     for (let j = 0; j <= connNo; j++) {
       let type = _.random(0,4);
-//      console.log(type);
+//      //console.log(type);
       let target = null;
       if (type == 0) {  //existing link
         let rv2 = _.random(0,nodesValid.length-1);
@@ -433,10 +463,10 @@ function addRandom() {
       let v = _.random(1,3);
       if (target == i) {
         newLinks.push({source: i, target: r, value: v});
-  //      console.log('1 source: ' + i + ', target: ' + r);
+  //      //console.log('1 source: ' + i + ', target: ' + r);
       } else {
         newLinks.push({source: i, target: target, value: v});
-    //    console.log('2 source: ' + i + ', target: ' + r);
+    //    //console.log('2 source: ' + i + ', target: ' + r);
       }
     }
   }
@@ -445,7 +475,7 @@ function addRandom() {
 
 function alterNode(id) {
   let n = d3.select('#node' + id);
-  console.log(n);
+  //console.log(n);
 }
 
 function alterLink(id) {
@@ -457,18 +487,20 @@ function highlight () {
   let s = nodes[r];
   let node = d3.select('#' + s.id);
   node.attr("r",10);
-  console.log(nodeLength,r,s);
+  //console.log(nodeLength,r,s);
 
-  console.log(links);
+  //console.log(links);
 }
 
 function setInner(id,content) {
-  let e = document.getElementById(id);
-  e.innerHTML = content;
   if (id == 'message') {
     let e = document.getElementById('messages');
     e.innerHTML += '<div class="message">' + content + '</div>';
     e.scrollTop = e.scrollHeight;
+  } else {
+    let e = document.getElementById(id);
+    e.innerHTML = content;
+
   }
 }
 
@@ -486,6 +518,20 @@ function renderProgress() {
   setInner('progressbar',c);
 }
 
+function setSpeed(n) {
+  speeds = [0,1,3,5];
+  for (let i in speeds) {
+    let e = document.getElementById('speed' + speeds[i]);
+    if (n == speeds[i]) {
+        e.className = 'c-button c-button--active';
+    } else {
+      e.className = 'c-button';
+    }
+  }
+  speed = n;
+}
+
+
 function toggle() {
   auto = !auto;
   let t = document.getElementById('toggle');
@@ -498,25 +544,26 @@ function toggle() {
 
 function event_start() {
   toggle();
-  setInner('message','<b>Learning Plan</b>');
+  let c = '<div class="plan"><b>Learning Plan</b><ul>';
   for (let e in events) {
     let ev = events[e];
-    setInner('message',JSON.stringify(ev));
+//    setInner('message',JSON.stringify(ev));
     if (ev.event == 'learn') {
       if (ev.type == 'node') {
-        setInner('message','Fact ' + ev.node);
+        c += '<li>Fact ' + ev.node + '</li>';
       } else if (ev.type == 'link') {
-        setInner('message','Connection ' + ev.link[0] + ' to ' + ev.link[1]);
+        c += '<li>Connection ' + ev.link[0] + ' to ' + ev.link[1] + '</li>';
       } else if (ev.type == 'path') {
-        setInner('message','Compare/Evaluate ' + ev.path[0] + ' to ' + ev.path[1]);
+        c += '<li>Compare/Evaluate ' + ev.path[0] + ' to ' + ev.path[1] + '</li>';
       }
     } else if (ev.event == 'formative') {
-      setInner('message','<i>Formative Assessment</i>' + ev);
+      c += '<li><i>Formative Assessment</i>' + '</li>';
     } else if (ev.event == 'summative') {
-      setInner('message','<i>Summative Assessment</i>' + ev);
+      c += '<li>Summative Assessment</i> ' + ev.type + '</li>';
     }
   }
-  setInner('message','');
+  c += '</ul></div>';
+  setInner('message',c);
 
   let o = document.getElementById('overlay');
   o.style.display = 'none';
@@ -546,8 +593,8 @@ function event_preassess() {
   let facts = 0;
   for (var i in nodes) {
     if (lo.facts.indexOf(nodes[i].id) >= 0) {
-//      console.log('found node in lo.facts ' + nodes[i].id,lo.facts);
-//      console.log('#node' + nodes[i].id)
+//      //console.log('found node in lo.facts ' + nodes[i].id,lo.facts);
+//      //console.log('#node' + nodes[i].id)
       d3.select('#node' + nodes[i].id).classed('highlight',true);
       facts++;
     }
@@ -555,10 +602,10 @@ function event_preassess() {
   let patterns = 0;
   for (var i in lo.patterns) {
     for (var i in links) {
-      console.log(links[i]);
+      //console.log(links[i]);
 /*      if (lo.facts.indexOf(nodes[i].id) >= 0) {
-        console.log('found node in lo.patterns ' + nodes[i].id,lo.facts);
-        console.log('#node' + nodes[i].id)
+        //console.log('found node in lo.patterns ' + nodes[i].id,lo.facts);
+        //console.log('#node' + nodes[i].id)
         d3.select('#node' + nodes[i].id).classed('highlight',true);
         facts++;
       }*/
@@ -579,7 +626,7 @@ function event_preassess() {
 
 function event_learn(ev) {
   setInner('title','Learning');
-  console.log('learn',ev);
+  //console.log('learn',ev);
   //teach node or teach connection
   let status = 'fail';
   if (ev.type == 'node')  {  //teach a node
@@ -587,11 +634,11 @@ function event_learn(ev) {
       console.warn('Invalid event',ev);
     } else if (nodeLookup[ev.node] != null && nodes[nodeLookup[ev.node]] != null) {
       let node = nodes[nodeLookup[ev.node]];
-      console.log('node',node);
+      //console.log('node',node);
       if (node.value+1 == ev.value) {
         status = 'success';
         node.value++;
-        console.log(status,'Incrementing ' + node.value);
+        //console.log(status,'Incrementing ' + node.value);
         d3.select('#node' + node.id).classed('highlight',true);
         lastEventClean.push(function() {
           d3.select('#node' + node.id).classed('highlight',false);
@@ -600,15 +647,15 @@ function event_learn(ev) {
         setInner('message','Learned fact ' + ev.node + ', increased to ' + node.value);
       } else if (node.value == ev.value) {
         status = 'warn';
-        console.log(status,'Same level ' + node.value);
+        //console.log(status,'Same level ' + node.value);
         setInner('message','No learning, fact at same level (' + node.value + ')');
       } else if (node.value > ev.value) {
         status = 'warn';
-        console.log(status,'Too low ' + node.value);
+        //console.log(status,'Too low ' + node.value);
         setInner('message','No learning, fact is too low level (' + node.value + ' &gt;' + ev.value + ')');
       } else {
         status = 'fail';
-        console.log(status,'Too high ' + node.value);
+        //console.log(status,'Too high ' + node.value);
         setInner('message','No learning, fact is too advanced (' + node.value + ' &gt;' + ev.value + ')');
       }
     } else {
@@ -617,56 +664,73 @@ function event_learn(ev) {
         addOne(parseInt(ev.node));
 //        d3.select('#node' + node.id).classed('highlight',true);
 
-        console.log(status,'Adding ' + ev.node);
+        //console.log(status,'Adding ' + ev.node);
         setInner('message','Learned new fact ' + ev.node + '.');
       } else {
         //fail
-        console.log(status,'Too high.');
+        //console.log(status,'Too high.');
         setInner('message','No learning, fact is too advanced.');
       }
     }
   } else if (ev.type == 'link') {  //link
-    console.log('link',ev);
+    //console.log('link',ev);
     if (ev.link == null) {
       console.warn('Invalid event',ev);
     } else if (nodeLookup[ev.link[0]] != null && nodeLookup[ev.link[1]] != null)  {
       link_id1 = 'link' + ev.link[0] + '_' + ev.link[1];
       let l1 = document.getElementById(link_id1);
-      console.log(link_id1,l1);
+      //console.log(link_id1,l1);
       link_id2 = 'link' + ev.link[1] + '_' + ev.link[0];
       let l2 = document.getElementById(link_id2);
-      console.log(link_id2,l2);
+      //console.log(link_id2,l2);
       if (l1 != null && l2 != null) {  //nodes and links present
         status = 'success';
-        setInner('message','Success, connection stronger from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
+        setInner('message','Connection stronger from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
       } else {  //nodes present, but not links
         status = 'success';
-        setInner('message','Success, new connection made from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
+        setInner('message','New connection made from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
         update([],[{source: ev.link[0], target: ev.link[1], value: 0}]);
       }
     } else {
-      console.log(status,'Missing nodes ' + ev.link);
-      setInner('message','Warning, connection could not be made from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
+      //console.log(status,'Missing nodes ' + ev.link);
+      setInner('message','No learning, connection could not be made from ' + ev.link[0] + ' to ' + ev.link[1] + '.');
     }
   } else if (ev.type == 'path') { //shorten
-    setInner('message','Path' + ev.path);
+//    setInner('message','Path' + ev.path);
     let r = pathCheck(ev.path[0],ev.path[1]);
-    console.log('path',r);
+    //console.log('path',r);
+    if (r.has == 0) {
+      setInner('message','No learning, no path could be made from ' + ev.path[0] + ' to ' + ev.path[1] + '.');
+    } else {
+      if (r.pathlen > 3) {
+        status = 'success';
+        update([],[{source: r.link[0], target: r.link[1], value: 0}]);
+        setInner('message','Path was too long, new connection made from ' + r.link[0] + ' to ' + r.link[1] + '.');
+      } else {
+        status = 'success';
+        setInner('message','Path could be made from ' + ev.path[0] + ' to ' + ev.path[1] + '.');
+      }
+    }
   }
   //types, 10% new node, existing connection, 5% random, 10% fail
 
   progress.push([1,'learn-' + status,'']);
   renderProgress();
-  ready += 300;
+  ready += 10 + (speed * 100);
 
 }
 
 function nodeCheck(n) {
   let r = {has: 0, count: n.length, tot: 0, avg: 0}
   for (let i in n) {
-    if (document.getElementById('node'+n[i])) {
+    if (nodeLookup[i] != null && nodes[nodeLookup[i]] != null) {
+      let node = nodes[nodeLookup[i]];
       r.has++;
-      r.tot += d3.select('#node' + n[i]).attr('r')-5;
+      r.tot += node.value;
+      d3.select('#node' + node.id).classed('highlight',true);
+      lastEventClean.push(function() {
+        d3.select('#node' + node.id).classed('highlight',false);
+      })
     }
   }
   r.avg = r.tot / r.count;
@@ -674,39 +738,69 @@ function nodeCheck(n) {
 }
 
 function linkCheck(l) {
-  let r = {has: 0, count: n.length, tot: 0, avg: 0}
+  let r = {has: 0, count: l.length, tot: 0, avg: 0}
+  let last = null;
   for (let i in l) {
-    if (document.getElementById('link'+l[i][0] + '_' + l[i][1])) {
-      r.has++;
-      r.tot += d3.select('#link'+l[i][0] + '_' + l[i][1]).attr('stroke-width')-1;
-    } else if (document.getElementById('link'+l[i][1] + '_' + l[i][0])) {
-      r.has++;
-      r.tot += d3.select('#link'+l[i][1] + '_' + l[i][0]).attr('stroke-width')-1;
+    if (last != null) {
+      if (linkLookup[last] != null && linkLookup[last][i] != null) {
+        let link = links[linkLookup[last][i]];
+        r.has ++;
+        r.tot += link.value;
+        d3.select('#node' + last).classed('highlight2',true);
+        d3.select('#node' + i).classed('highlight2',true);
+        d3.select('#link' + last + '_' + i).classed('highlight-link',true);
+        d3.select('#link' + i + '_' + last).classed('highlight-link',true);
+        lastEventClean.push(function() {
+          let l1 = last;
+          let l2 = i;
+          d3.select('#node' + l1).classed('highlight2',false);
+          d3.select('#node' + l2).classed('highlight2',false);
+          d3.select('#link' + l1 + '_' + l2).classed('highlight-link',false);
+          d3.select('#link' + l2 + '_' + l1).classed('highlight-link',false);
+        })
+      }
     }
+    last = i;
   }
   r.avg = r.tot / r.count;
   return r;
 }
 
 function buildPaths(start,end,path,skip,depth = 0) {
+  start = parseInt(start);
+  end = parseInt(end);
+  skip[start] = true;
   let matches  = [];
-  console.log('buildPaths start',start,end,path,skip,depth);
-
+//  //console.log(" ".repeat(depth) + 'buildPaths start',start + ' to ' + end,path,skip,depth);
+  if (depth > 5) {
+    return matches;
+  }
+  let path2 = path.slice();
+  path2.push(start);
   for (let k in links) {
-    if (links[k]['source']['id'] == start) {
-      if (skip[links[k]['target']['id']] == null) {  //only follow new nodes
-        let target = links[k]['target']['id'];
+    if (links[k]['source_id'] == start) {
+//      //console.log(" ".repeat(depth) + 'Match: [' + k + ']',links[k]['source_id'] + ' to ' + links[k]['target_id']);
+      if (links[k]['target_id'] == end) {  //match
+        let path3 = path2.slice();
+        path3.push(end);
+        matches.push(path3);
+      } else if (path2.indexOf(links[k]['target_id']) == -1) {  //only follow new nodes
+        let target = links[k]['target_id'];
         skip[target] = true;
-        let p = buildPaths(target,end,path.concat(path,[target]),skip,depth+1);
+        let p = buildPaths(target,end,path2,skip,depth+1);
         if (p.length > 0) {
           for (let i in p) {
             matches.push(p[i]);
           }
         }
+      } else {
+//        //console.log(" ".repeat(depth) + 'Skip: ' + k,links[k]['source_id'] + ' to ' + links[k]['target_id']);
       }
+    } else {
+//      //console.log(" ".repeat(depth) + 'No Match: ' + k,links[k]['source_id'] + ' to ' + links[k]['target_id']);
     }
   }
-  console.log('buildPaths end',matches,depth);
+//  //console.log(" ".repeat(depth) + 'buildPaths end',start,end,matches,depth);
 
   return matches;
 }
@@ -717,22 +811,23 @@ function buildPaths(start,end,path,skip,depth = 0) {
 
 function pathCheck(start,end) {
 
-  console.log('pathCheck',start,end);
-  let r = {has: 0, count: 1, tot: 0, avg: 0, pathmsg: ''}
+  //console.log('pathCheck',start,end);
+  let r = {has: 0, count: 1, tot: 0, avg: 0, path: [], pathlen: -1, pathmsg: '', link: []}
   if (nodeLookup[start] != null && nodeLookup[end] != null) {
 //    let startnode = nodes[nodesLookup[start]];
 //    let endnode = nodes[nodesLookup[end]];
-    let paths = buildPaths(start,end,[start],[start],0);
+    let paths = buildPaths(start,end,[],{},0);
     let path = [];
     let newlinks = [];
     for (let i in paths) {
       if (path.length == 0 || paths[i].length < path.length) {
         path = paths[i];
+        r.pathlen = paths[i].length;
       }
       if (path.length > 3) {
         let l = paths[i].length;
-        newlinks.push(paths[i][0],paths[i][2]);
-        newlinks.push(paths[i][l-1],paths[i][l-3]);
+        newlinks.push([paths[i][0],paths[i][2]]);
+        newlinks.push([paths[i][l-1],paths[i][l-3]]);
       }
     }
     if (path.length > 0) {
@@ -740,6 +835,12 @@ function pathCheck(start,end) {
       r.path = path;
       let lr = parseInt(Math.random()*newlinks.length);
       r.link = newlinks[lr];
+      for (let i in path) {
+        d3.select('#node' + path[i]).classed('highlight2',true);
+        lastEventClean.push(function() {
+          d3.select('#node' + path[i]).classed('highlight2',false);
+        });
+      }
     }
 /*
 
@@ -788,75 +889,131 @@ let t = [
 
 
 function event_formative(ev) {
-  let c = '<div class="red">';
-  for (let i = 0; i < 5; i++) {
-    let r = _.random(1,3);
-    let t = [
-      'Informal Assessment',
-      'Selected Response',
-      'Self-Reflection',
-      'Peer Review',
-    ];
-    if (r == 1) {  //fact
-      let r2 = _.random(0,lo.facts.length);
-      let r3 = _.random(0,t.length);
-      let n = lo.facts.length[r2];
-      if (nodeLookup[n] != null) {
+  let ts = [
+    'Informal Verbal Assessment',
+    'Selected Response Quiz',
+    'Self-Reflection',
+    'Peer Review',
+  ];
+  let tr = _.random(0,ts.length-1);
+  let t = ts[tr];
 
+  let c = '<div class="form">Formative Assessment, ' + t + ':<ul>';
+  for (let i = 0; i < 3; i++) {
+    let r = _.random(1,3);
+    if (r == 1) {  //fact
+      let r2 = _.random(0,lo.facts.length-1);
+      let n = lo.facts[r2];
+      let r3 = nodeCheck([n]);
+      if (r3.has > 0) {
+        //console.log('form node','present');
+        c += '<li>Fact ' + n + ' is assessed and present.</li>';
       } else {
         addOne(n);
+        //console.log('form node','added');
+        c += '<li>Fact ' + n + ' assessed as missing and now added.</li>';
       }
+    } else if (r == 2) {  //link
+      let r2 = _.random(0,lo.patterns.length-1);
+      let r3 = linkCheck(lo.patterns[r2]);
+      //console.log(r3)
+      c += '<li>Pattern ' + JSON.stringify(lo.patterns[r2]) + ' - ' + r3.has + '/' + r3.count + ' steps mastered.</li>';
+    } else if (r == 3) {  //compare
+      let r2 = _.random(0,lo.comparisons.length-1);
+      let r3 = pathCheck(lo.comparisons[r2][0],lo.comparisons[r2][1]);
+      c += '<li>Compare/Evalute ' + lo.comparisons[r2][0] + ' to ' + lo.comparisons[r2][1] + ' ';
+      if (r3.has > 0) {
+        c += 'Connection too long or missing facts.';
+      } else {
+        if (r3.len > 3) {
+          c += 'Connection needs reinforcement. (len: ' + r3.len + ')';
+        } else {
+          c += 'Strong connection.';
+        }
+      }
+      c += '</li>';
     }
-
   }
-  c += '</div>';
+  c += '</ul></div>';
 
   setInner('title','Formative Assessment');
   setInner('message',c);
   progress.push([1,'formative','F']);
   renderProgress();
-  ready += 1000;
+  ready += 500 + (speed * 300);
 }
 
 function event_summative(ev) {
   setInner('title','Summative Assessment');
   progress.push([1,'summative','S']);
 
+  let c = '<div class="summ">Summative Assessment, ';
   if (ev.type == 'nodes') {
-
+    c += 'Fact-based Examination<br />';
+    let total = 0;
+    let present = 0;
+    //console.log('summ nodes',ev.data);
+    let r = nodeCheck(ev.data);
+    let p = parseInt(r.has / r.count * 10000)/100;
+    c += '<i>Results: ' + r.has + '/' + r.count + ' facts or ' + p + '%. Average value: ' + r.avg + '.<br /><br />';
+//    //console.log('summ nodes',r);
   } else if (ev.type == 'links') {
-
+    c += 'Research or Presentation<br />';
+    let r = linkCheck(ev.data);
+    c += '<i>Results: ' + r.has + '/' + r.count + ' steps in the pattern or process.<br /><br />';
   } else if (ev.type == 'comparisons') {
-
-  } else if (ev.type == 'create') {
-    let last = lo.creation[0];
-    for (let i = 1; i < lo.creation.length; i++) {
-      let curr = lo.creation[i];
-      pathCheck(curr,last)
-      last = lo.creation[i];
+    c += 'Open Ended Project<br />';
+    let r = pathCheck(ev.data[0],ev.data[1]);
+    if (r.has > 0) {
+      c += '<i>Results: Could not complete the complex connection.<br /><br />';
+    } else {
+      if (r.len > 3) {
+        c += '<i>Results: Completed a weak complex connection (len: ' + r.len + ').<br /><br />';
+      } else {
+        c += '<i>Results: Completed a strong connection (len: ' + r.len + ').<br /><br />';
+      }
     }
+    //console.log('summ compare',r);
+  } else if (ev.type == 'create') {
+    c += 'Creative Project/Performance<br />';
+    let last = ev.data[0];
+    let count = 0;
+    for (let i = 1; i < ev.data.length; i++) {
+      let curr = ev.data[i];
+      let r = pathCheck(curr,last);
+      if (r.has > 0) {
+        count++;
+      }
+      //console.log('summ create',r);
+      last = ev.data[i];
+    }
+    c += '<i>Results: ' + count + '/' + ev.data.length + ' complex connections.<br /><br />';
   }
+  c += '</div>';
+  setInner('message',c);
+  /*
   events[20] = {event: 'summative', type: 'nodes', data: lo.facts};
   events[40] = {event: 'summative', type: 'links', data: lo.patterns[1]};
   events[60] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
   events[80] = {event: 'summative', type: 'comparisons', data: lo.comparisons[0]};
   events[99] = {event: 'summative', type: 'create', data: lo.creation[0]};
-
+*/
   renderProgress();
-  ready += 2000;
 
+  ready += 100 + (speed * 300);
 }
 
 
 
 function event_final(ev) {
   setInner('title','Final Results');
+  let c = '<div class="summ">';
+  c += '<p><i>This visualization is conjecture, and the formative assessment checks are randomized, but even with that it is clearly evident that formative assessment is the only way to collect information on learning and guide learning.</i></p>';
+  c += '<p><i>It is also clear that it is relatively easy to learn lower order facts, but higher order connections are much more difficult without intentional formative assessment (instead of random selection).</i></p>';
+  c += '</div>';
+  setInner('message',c);
 
-
-
-  progress.push([1,'summative','S']);
-  renderProgress();
-  ready += 1000;
+  ready += 100 + (speed * 300);
 }
 
 /*
