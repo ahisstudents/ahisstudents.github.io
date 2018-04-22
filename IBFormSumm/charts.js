@@ -962,7 +962,7 @@ function event_summative(ev) {
     let r = linkCheck(ev.data);
     c += '<i>Results: ' + r.has + '/' + r.count + ' steps in the pattern or process.<br /><br />';
   } else if (ev.type == 'comparisons') {
-    c += 'Open Ended Project<br />';
+    c += 'Open-Ended Project<br />';
     let r = pathCheck(ev.data[0],ev.data[1]);
     if (r.has > 0) {
       c += '<i>Results: Could not complete the complex connection.<br /><br />';
@@ -1008,7 +1008,7 @@ function event_summative(ev) {
 function event_final(ev) {
   setInner('title','Final Results');
   let c = '<div class="summ">';
-  c += '<p><i>This visualization is conjecture, and the formative assessment checks are randomized, but even with that it is clearly evident that formative assessment is the only way to collect information on learning and guide learning.</i></p>';
+  c += '<p><i>This visualization is conjecture, and the formative assessment checks are randomized, but even with that, it is clearly evident that formative assessment is the only way to collect information on learning and to guide learning.</i></p>';
   c += '<p><i>It is also clear that it is relatively easy to learn lower order facts, but higher order connections are much more difficult without intentional formative assessment (instead of random selection).</i></p>';
   c += '</div>';
   setInner('message',c);
